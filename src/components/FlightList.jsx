@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import getIcon from '../utils/iconUtils';
+import { toast } from 'react-toastify';
 
 const FlightList = () => {
   const PlaneIcon = getIcon('Plane');
@@ -112,6 +113,19 @@ const FlightList = () => {
       maximumFractionDigits: 0
     }).format(amount);
   };
+
+  // Handle flight booking
+  const handleBookFlight = (flight) => {
+    // Save flight booking to localStorage
+    const bookedFlights = JSON.parse(localStorage.getItem('bookedFlights') || '[]');
+    bookedFlights.push({
+      ...flight,
+      bookingDate: new Date().toISOString(),
+      bookingId: `BK${Math.floor(Math.random() * 10000)}`
+    });
+    localStorage.setItem('bookedFlights', JSON.stringify(bookedFlights));
+    toast.success(`Successfully booked ${flight.airline} flight from ${flight.from} to ${flight.to}!`);
+  };
   
   // Filter flights when price range changes
   useEffect(() => {
@@ -208,7 +222,10 @@ const FlightList = () => {
               
               <div className="text-right">
                 <div className="font-bold text-xl text-primary">{formatCurrency(flight.price)}</div>
-                <button className="btn btn-primary text-sm mt-2">Book Now</button>
+                <button 
+                  className="btn btn-primary text-sm mt-2"
+                  onClick={() => handleBookFlight(flight)}
+                >Book Now</button>
               </div>
             </div>
           </motion.div>
