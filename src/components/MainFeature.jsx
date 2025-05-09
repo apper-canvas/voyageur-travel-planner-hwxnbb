@@ -19,6 +19,7 @@ function MainFeature() {
   // Trip planner state
   const [destination, setDestination] = useState('');
   const [startDate, setStartDate] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
   const [endDate, setEndDate] = useState('');
   const [travelers, setTravelers] = useState(2);
   const [budget, setBudget] = useState(2000);
@@ -138,6 +139,35 @@ function MainFeature() {
     setErrors({});
     setTripPlan(null);
   };
+  // Save the trip plan
+  const savePlan = () => {
+    if (!tripPlan) return;
+    
+    setIsSaving(true);
+    
+    try {
+      // Generate a unique ID for the plan
+      const planId = `trip-${Date.now()}`;
+      
+      // Add timestamp and ID to the plan
+      const planToSave = {
+        ...tripPlan,
+        id: planId,
+        savedAt: new Date().toISOString()
+      };
+      
+      // Save to localStorage
+      const savedPlans = JSON.parse(localStorage.getItem('savedTripPlans') || '[]');
+      localStorage.setItem('savedTripPlans', JSON.stringify([...savedPlans, planToSave]));
+      
+      toast.success("Trip plan saved successfully!");
+    } catch (error) {
+      toast.error("Failed to save trip plan. Please try again.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
 
   return (
     <div className="max-w-5xl mx-auto">
@@ -415,8 +445,18 @@ function MainFeature() {
                 </div>
                 <button 
                   className="btn btn-accent"
-                  onClick={() => toast.info("This feature will be available in the full version!")}
+                  onClick={savePlan}
+                  disabled={isSaving}
                 >
+                  {isSaving ? (
+                    <>
+                      <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></div>
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                    </>
+                  )}
                   Save Plan
                 </button>
               </div>
