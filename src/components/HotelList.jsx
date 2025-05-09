@@ -172,19 +172,19 @@ const HotelList = () => {
               >
                 <div className="relative">
                   <img src={hotel.image} alt={hotel.name} className="w-full h-48 object-cover rounded-lg" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent rounded-lg"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent rounded-lg"></div>
                   <div className="absolute bottom-0 left-0 p-4 w-full">
-                    <h4 className="font-semibold text-lg text-white">{hotel.name}</h4>
-                    <div className="flex items-center text-white/90 mb-1">
+                    <h4 className="font-bold text-lg text-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">{hotel.name}</h4>
+                    <div className="flex items-center text-white mb-1 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
                       <MapPinIcon className="w-4 h-4 mr-1" /> {hotel.location}
                     </div>
                     <div className="flex justify-between items-center">
-                      <div className="flex items-center text-amber-400">
+                      <div className="flex items-center text-amber-400 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
                         <StarIcon className="w-4 h-4 mr-1 fill-current" /> {hotel.rating}
                       </div>
-                      <div className="font-semibold text-lg text-white">
+                      <div className="font-semibold text-lg text-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
                         {formatCurrency(hotel.price)}
-                        <span className="text-sm text-white/80"> / night</span>
+                        <span className="text-sm text-white"> / night</span>
                       </div>
                     </div>
                   </div>
