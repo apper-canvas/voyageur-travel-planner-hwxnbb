@@ -127,7 +127,7 @@ const HotelDetail = ({ hotel, onBack }) => {
           </div>
 
           {/* Hotel Information */}
-          <div className="card">
+          <div className="card mb-6">
             <div className="flex justify-between items-start mb-4">
               <div>
                 <h2 className="text-2xl font-bold">{hotel.name}</h2>
@@ -146,8 +146,9 @@ const HotelDetail = ({ hotel, onBack }) => {
               </div>
             </div>
             
+            <h3 className="text-lg font-semibold mb-2">About This Hotel</h3>
             <p className="text-surface-600 dark:text-surface-300 mb-6">
-              {hotelDetails.description}
+              {hotelDetails.description || `Experience luxury and comfort at ${hotel.name}, located in the heart of ${hotel.location.split(',')[0]}. Our hotel offers stunning views, exceptional service, and world-class amenities to make your stay memorable.`}
             </p>
 
             <h3 className="text-lg font-semibold mb-3">Amenities</h3>
