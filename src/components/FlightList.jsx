@@ -96,6 +96,12 @@ const FlightList = () => {
   // Find min and max prices from flight data
   const minDataPrice = Math.min(...flights.map(flight => flight.price));
   const maxDataPrice = Math.max(...flights.map(flight => flight.price));
+
+  // Get unique source and destination locations
+  const sourceLocations = [...new Set(flights.map(flight => flight.from))];
+  const destinationLocations = [...new Set(flights.map(flight => flight.to))];
+  const [selectedSource, setSelectedSource] = useState('');
+  const [selectedDestination, setSelectedDestination] = useState('');
   
   // State for price filter
   const [minPrice, setMinPrice] = useState(minDataPrice);
@@ -126,14 +132,33 @@ const FlightList = () => {
     localStorage.setItem('bookedFlights', JSON.stringify(bookedFlights));
     toast.success(`Successfully booked ${flight.airline} flight from ${flight.from} to ${flight.to}!`);
   };
+
+  // Reset filters
+  const resetFilters = () => {
+    setMinPrice(minDataPrice);
+    setMaxPrice(maxDataPrice);
+    setSelectedSource('');
+    setSelectedDestination('');
+  };
   
   // Filter flights when price range changes
   useEffect(() => {
-    const filtered = flights.filter(
-      flight => flight.price >= minPrice && flight.price <= maxPrice
-    );
+    const filtered = flights.filter(flight => {
+      // Price filter
+      const matchesPrice = flight.price >= minPrice && flight.price <= maxPrice;
+      
+      // Source filter
+      const matchesSource = selectedSource === '' || flight.from === selectedSource;
+      
+      // Destination filter
+      const matchesDestination = selectedDestination === '' || flight.to === selectedDestination;
+      
+      // Combined filtering
+      return matchesPrice && matchesSource && matchesDestination;
+    });
+    
     setFilteredFlights(filtered);
-  }, [minPrice, maxPrice, flights]);
+  }, [minPrice, maxPrice, selectedSource, selectedDestination, flights]);
 
   return (
     <div className="mt-8">
@@ -155,6 +180,55 @@ const FlightList = () => {
           exit={{ opacity: 0, height: 0 }}
           className="card mb-6"
         >
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+            <div className="input-group mb-0">
+              <div className="flex items-center gap-2 mb-2">
+                <PlaneIcon className="h-4 w-4 text-primary rotate-45" />
+                <label htmlFor="sourceLocation" className="font-medium">From</label>
+              </div>
+              <select
+                id="sourceLocation"
+                value={selectedSource}
+                onChange={(e) => setSelectedSource(e.target.value)}
+                className="w-full"
+              >
+                <option value="">All Departure Locations</option>
+                {sourceLocations.map((location) => (
+                  <option key={location} value={location}>
+                    {location}
+                  </option>
+                ))}
+              </select>
+            </div>
+            
+            <div className="input-group mb-0">
+              <div className="flex items-center gap-2 mb-2">
+                <PlaneIcon className="h-4 w-4 text-primary -rotate-45" />
+                <label htmlFor="destinationLocation" className="font-medium">To</label>
+              </div>
+              <select
+                id="destinationLocation"
+                value={selectedDestination}
+                onChange={(e) => setSelectedDestination(e.target.value)}
+                className="w-full"
+              >
+                <option value="">All Arrival Locations</option>
+                {destinationLocations.map((location) => (
+                  <option key={location} value={location}>
+                    {location}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div className="border-t border-surface-200 dark:border-surface-700 pt-6 mb-6"></div>
+          
+          <div className="flex justify-between items-center mb-2">
+            <h4 className="font-medium">Filters</h4>
+            <button onClick={resetFilters} className="text-sm text-primary hover:text-primary-dark">Reset All</button>
+          </div>
+          
           <div className="mb-4">
             <div className="flex items-center gap-2 mb-2">
               <WalletIcon className="h-4 w-4 text-primary" />
