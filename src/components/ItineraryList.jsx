@@ -146,7 +146,7 @@ const ItineraryList = () => {
   const handleViewItinerary = (itinerary) => {
     setSelectedItinerary(itinerary);
     setShowModal(true);
-    toast.info(`Viewing ${itinerary.title} itinerary details`);
+    toast.info(`Opening ${itinerary.title} itinerary details`);
   };
   
   // Close the modal
@@ -284,11 +284,11 @@ const ItineraryList = () => {
       {/* Itinerary Details Modal */}
       {showModal && selectedItinerary && (
         <div className="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            className="bg-white dark:bg-surface-800 rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl relative"
+            className="bg-white dark:bg-surface-800 rounded-xl max-w-3xl w-full max-h-[80vh] overflow-y-auto shadow-2xl relative"
            >
             {selectedItinerary && (
               <div className="flex flex-col">
@@ -362,7 +362,7 @@ const ItineraryList = () => {
                     <button onClick={closeModal} className="btn btn-outline w-full">Close</button>
                     <button onClick={() => {
                       toast.success("Itinerary booked successfully!");
-                      closeModal();
+                      setTimeout(closeModal, 500);
                     }} className="btn btn-primary w-full">Book This Itinerary</button>
                   </div>
                 </div>
