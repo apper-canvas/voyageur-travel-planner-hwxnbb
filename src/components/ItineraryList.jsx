@@ -282,20 +282,29 @@ const ItineraryList = () => {
         )}
       
       {/* Itinerary Details Modal */}
-      {showModal && selectedItinerary && (
-        <div className="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="bg-white dark:bg-surface-800 rounded-xl max-w-3xl w-full max-h-[80vh] overflow-y-auto shadow-2xl relative"
-           >
-            {selectedItinerary && (
+      {showModal && (
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
+          onClick={closeModal}
+        >
+          <motion.div 
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            transition={{ duration: 0.3, type: "spring", stiffness: 300 }}
+            className="bg-white dark:bg-surface-800 rounded-xl max-w-4xl w-full max-h-[85vh] overflow-hidden shadow-2xl relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="overflow-y-auto max-h-[85vh]">
               <div className="flex flex-col">
                 <div className="relative h-56 md:h-72">
                   <img 
                     src={selectedItinerary.image} 
-                    alt={selectedItinerary.title} 
+                    alt={selectedItinerary?.title} 
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
@@ -308,11 +317,11 @@ const ItineraryList = () => {
                   </div>
                   <button 
                     onClick={closeModal}
-                  className="absolute top-4 right-4 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full transition-colors"
+                    className="absolute top-4 right-4 bg-black/40 hover:bg-black/60 text-white p-2 rounded-full transition-colors"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                    </svg>
+                    </svg> 
                   </button>
                 </div>
                 
@@ -366,9 +375,9 @@ const ItineraryList = () => {
                     }} className="btn btn-primary w-full">Book This Itinerary</button>
                   </div>
                 </div>
-              </div>
+            </div>
             )}
-          </motion.div>
+        </motion.div>
         </div>
       )}
       </div>
