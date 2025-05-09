@@ -378,7 +378,6 @@ const ItineraryList = () => {
               </div>
             </div>
           </motion.div>
-        </motion.div>
       )}
     </div>
   );
