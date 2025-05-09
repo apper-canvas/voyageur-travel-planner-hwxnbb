@@ -34,9 +34,9 @@ function MainFeature() {
   
   // Currency formatter
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-IN', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'INR',
       maximumFractionDigits: 0
     }).format(amount);
   };
@@ -258,8 +258,8 @@ function MainFeature() {
                 className="w-full h-2 bg-surface-200 dark:bg-surface-700 rounded-lg appearance-none cursor-pointer"
               />
               <div className="flex justify-between text-xs text-surface-500">
-                <span>$500</span>
-                <span>$10,000</span>
+                <span>₹500</span>
+                <span>₹10,000</span>
               </div>
             </div>
             
