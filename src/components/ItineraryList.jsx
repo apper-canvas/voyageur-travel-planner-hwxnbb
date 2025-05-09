@@ -281,7 +281,7 @@ const ItineraryList = () => {
           </div>
         )}
       
-      {/* Itinerary Details Modal */}
+
       {showModal && (
         <motion.div 
           initial={{ opacity: 0 }}
@@ -379,8 +379,8 @@ const ItineraryList = () => {
             </div>
           </motion.div>
         </motion.div>
-      )}
-    </div>
+      )} 
+    </div> 
   );
 };
 
