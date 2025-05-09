@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { toast } from 'react-toastify';
 import getIcon from '../utils/iconUtils';
 
 const ItineraryList = () => {
@@ -23,7 +24,9 @@ const ItineraryList = () => {
       highlights: [
         "Visit the Taj Mahal at sunrise",
         "Explore Jaipur's majestic forts",
-        "Discover Delhi's blend of old and new"
+        "Discover Delhi's blend of old and new",
+        "Authentic local cuisine experiences",
+        "Cultural performances and heritage walks"
       ]
     },
     {
@@ -37,7 +40,9 @@ const ItineraryList = () => {
       highlights: [
         "Overnight stay on traditional houseboat",
         "Ayurvedic spa treatments",
-        "Fresh seafood cuisine"
+        "Fresh seafood cuisine",
+        "Visit to spice plantations",
+        "Cultural Kathakali performances"
       ]
     },
     {
@@ -51,7 +56,9 @@ const ItineraryList = () => {
       highlights: [
         "Cross the famous Rohtang Pass",
         "Monastery visits in Ladakh",
-        "Camping under the stars"
+        "Camping under the stars",
+        "River rafting adventures",
+        "Local Himalayan cuisine"
       ]
     },
     {
@@ -110,6 +117,10 @@ const ItineraryList = () => {
   const [maxDays, setMaxDays] = useState(maxDuration);
   const [filteredItineraries, setFilteredItineraries] = useState(itineraries);
   const [showFilters, setShowFilters] = useState(false);
+  
+  // States for itinerary modal
+  const [selectedItinerary, setSelectedItinerary] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   // Format currency in Rupees
   const formatCurrency = (amount) => {
@@ -130,6 +141,30 @@ const ItineraryList = () => {
     
     setFilteredItineraries(filtered);
   }, [maxPrice, minDays, maxDays, itineraries]);
+  
+  // Handle view itinerary button click
+  const handleViewItinerary = (itinerary) => {
+    setSelectedItinerary(itinerary);
+    setShowModal(true);
+    toast.info(`Viewing ${itinerary.title} itinerary details`);
+  };
+  
+  // Close the modal
+  const closeModal = () => {
+    setShowModal(false);
+    setTimeout(() => {
+      setSelectedItinerary(null);
+    }, 300); // Wait for animation to complete
+  };
+  
+  // Generate day-by-day itinerary for example purposes
+  const generateDayItinerary = (itinerary) => {
+    return Array.from({ length: itinerary.duration }, (_, i) => ({
+      day: i + 1,
+      title: `Day ${i + 1}: ${itinerary.destinations[i % itinerary.destinations.length]}`,
+      description: `Explore the beautiful sights of ${itinerary.destinations[i % itinerary.destinations.length]} with guided tours and authentic experiences.`
+    }));
+  };
 
   return (
     <div className="mt-8">
@@ -234,7 +269,7 @@ const ItineraryList = () => {
                   </div>
                 </div>
                 
-                <button className="btn btn-primary w-full mt-4">View Itinerary</button>
+                <button onClick={() => handleViewItinerary(itinerary)} className="btn btn-primary w-full mt-4">View Itinerary</button>
               </div>
             </div>
           </motion.div>
@@ -245,6 +280,97 @@ const ItineraryList = () => {
             </div>
           </div>
         )}
+      
+      {/* Itinerary Details Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="bg-white dark:bg-surface-800 rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-xl"
+          >
+            {selectedItinerary && (
+              <div className="flex flex-col">
+                <div className="relative h-56 md:h-72">
+                  <img 
+                    src={selectedItinerary.image} 
+                    alt={selectedItinerary.title} 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+                  <div className="absolute bottom-0 left-0 p-6">
+                    <h2 className="text-white text-2xl md:text-3xl font-bold">{selectedItinerary.title}</h2>
+                    <div className="flex items-center text-white/90 mt-2">
+                      <MapPinIcon className="w-4 h-4 mr-1" /> 
+                      {selectedItinerary.destinations.join(" • ")}
+                    </div>
+                  </div>
+                  <button 
+                    onClick={closeModal}
+                    className="absolute top-4 right-4 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                    </svg>
+                  </button>
+                </div>
+                
+                <div className="p-6">
+                  <div className="flex justify-between flex-wrap gap-4 mb-6">
+                    <div className="flex items-center">
+                      <ClockIcon className="w-5 h-5 mr-2 text-primary" /> 
+                      <span className="font-medium">{selectedItinerary.duration} days</span>
+                    </div>
+                    <div className="flex items-center">
+                      <WalletIcon className="w-5 h-5 mr-2 text-primary" /> 
+                      <span className="font-medium">{formatCurrency(selectedItinerary.price)} / person</span>
+                    </div>
+                    <div className="flex items-center">
+                      <UsersIcon className="w-5 h-5 mr-2 text-primary" /> 
+                      <span className="font-medium">Min. 2 travelers</span>
+                    </div>
+                  </div>
+                  
+                  <p className="mb-6">{selectedItinerary.description}</p>
+                  
+                  <h3 className="text-xl font-semibold mb-4">Trip Highlights</h3>
+                  <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-2">
+                    {selectedItinerary.highlights.map((highlight, i) => (
+                      <div key={i} className="flex items-center">
+                        <div className="rounded-full bg-primary/10 p-1 mr-2">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-primary" viewBox="0 0 20 20" fill="currentColor">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </div>
+                        <span>{highlight}</span>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <h3 className="text-xl font-semibold mb-4">Day-by-Day Itinerary</h3>
+                  <div className="space-y-4">
+                    {generateDayItinerary(selectedItinerary).map((day) => (
+                      <div key={day.day} className="border-l-2 border-primary pl-4 pb-2">
+                        <h4 className="font-semibold text-lg">{day.title}</h4>
+                        <p className="text-surface-600 dark:text-surface-300">{day.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <div className="mt-8 space-y-4">
+                    <button onClick={closeModal} className="btn btn-outline w-full">Close</button>
+                    <button onClick={() => {
+                      toast.success("Itinerary booked successfully!");
+                      closeModal();
+                    }} className="btn btn-primary w-full">Book This Itinerary</button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </motion.div>
+        </div>
+      )}
       </div>
     </div>
   );
