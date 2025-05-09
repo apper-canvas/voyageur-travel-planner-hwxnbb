@@ -375,12 +375,11 @@ const ItineraryList = () => {
                     }} className="btn btn-primary w-full">Book This Itinerary</button>
                   </div>
                 </div>
+              </div>
             </div>
-            )}
+          </motion.div>
         </motion.div>
-        </div>
       )}
-      </div>
     </div>
   );
 };
