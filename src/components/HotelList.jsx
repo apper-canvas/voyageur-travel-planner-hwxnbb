@@ -170,23 +170,40 @@ const HotelList = () => {
                 className="card overflow-hidden hover:shadow-lg cursor-pointer transition-all"
                 onClick={() => handleSelectHotel(hotel)}
               >
-                <div className="relative">
-                  <img src={hotel.image} alt={hotel.name} className="w-full h-48 object-cover rounded-lg" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent rounded-lg"></div>
+                <div className="relative mb-3">
+                  <img src={hotel.image} alt={hotel.name} className="w-full h-48 object-cover rounded-t-lg" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent rounded-t-lg"></div>
                   <div className="absolute bottom-0 left-0 p-4 w-full">
                     <h4 className="font-bold text-lg text-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">{hotel.name}</h4>
                     <div className="flex items-center text-white mb-1 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
                       <MapPinIcon className="w-4 h-4 mr-1" /> {hotel.location}
                     </div>
-                    <div className="flex justify-between items-center">
-                      <div className="flex items-center text-amber-400 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
-                        <StarIcon className="w-4 h-4 mr-1 fill-current" /> {hotel.rating}
-                      </div>
-                      <div className="font-semibold text-lg text-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
-                        {formatCurrency(hotel.price)}
-                        <span className="text-sm text-white"> / night</span>
-                      </div>
+                  </div>
+                </div>
+                
+                <div className="px-4 pb-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <div className="flex items-center text-amber-500">
+                      <StarIcon className="w-4 h-4 mr-1 fill-current" /> 
+                      <span className="font-medium">{hotel.rating}</span>
+                      <span className="text-xs text-surface-500 ml-1">(124 reviews)</span>
                     </div>
+                    <div className="font-semibold text-lg">
+                      {formatCurrency(hotel.price)}
+                      <span className="text-sm text-surface-500"> / night</span>
+                    </div>
+                  </div>
+                  
+                  <p className="text-surface-600 dark:text-surface-400 text-sm mb-3">
+                    Experience luxury and comfort at {hotel.name}, located in the heart of {hotel.location.split(',')[0]}.
+                  </p>
+                  
+                  <div className="flex flex-wrap gap-2">
+                    <span className="text-xs bg-surface-100 dark:bg-surface-700 px-2 py-1 rounded">Free WiFi</span>
+                    <span className="text-xs bg-surface-100 dark:bg-surface-700 px-2 py-1 rounded">Restaurant</span>
+                    <span className="text-xs bg-surface-100 dark:bg-surface-700 px-2 py-1 rounded">Swimming Pool</span>
+                    <span className="text-xs bg-surface-100 dark:bg-surface-700 px-2 py-1 rounded">Room Service</span>
+                    <span className="text-xs text-primary">+4 more</span>
                   </div>
                 </div>
               </motion.div>

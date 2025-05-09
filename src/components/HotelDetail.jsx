@@ -97,7 +97,7 @@ const HotelDetail = ({ hotel, onBack }) => {
                   alt={hotel.name} 
                   className="w-full h-full object-cover rounded-lg"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/60 to-transparent rounded-lg"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent rounded-lg"></div>
                 <div className="absolute bottom-0 left-0 p-4 w-full">
                   <h1 className="text-2xl font-bold text-white drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">{hotel.name}</h1>
                   <div className="flex items-center text-white mb-1 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]">
