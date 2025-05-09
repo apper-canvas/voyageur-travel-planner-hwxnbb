@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import getIcon from '../utils/iconUtils';
 import MainFeature from '../components/MainFeature';
+import HotelList from '../components/HotelList';
 
 function Home() {
   const [activeTab, setActiveTab] = useState('flights');
@@ -95,17 +96,21 @@ function Home() {
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <SearchIcon className="h-5 w-5 text-surface-400" />
             </div>
-            <input
-              type="text"
-              placeholder={`Search for ${activeTab}...`}
-              className="w-full pl-10 rounded-lg"
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  handleSearch(e.target.value);
-                }
-              }}
-            />
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder={`Search for ${activeTab}...`}
+                className="w-full pl-10 rounded-lg"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleSearch(e.target.value);
+                  }
+                }}
+              />
+            </div>
           </div>
+          
+          {activeTab === 'hotels' && <HotelList />}
         </motion.div>
       </section>
 
