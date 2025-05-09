@@ -383,5 +383,4 @@ const ItineraryList = () => {
     </div>
   );
 };
-
 export default ItineraryList;
