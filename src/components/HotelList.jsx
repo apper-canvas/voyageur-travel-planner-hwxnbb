@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import getIcon from '../utils/iconUtils';
+import HotelDetail from './HotelDetail';
 
 const HotelList = () => {
   const StarIcon = getIcon('Star');
@@ -70,6 +71,7 @@ const HotelList = () => {
   
   // Filtered hotels
   const [filteredHotels, setFilteredHotels] = useState(hotels);
+  const [selectedHotel, setSelectedHotel] = useState(null);
   const [showFilters, setShowFilters] = useState(false);
 
   // Format currency in Rupees
@@ -89,6 +91,16 @@ const HotelList = () => {
     setFilteredHotels(filtered);
   }, [minPrice, maxPrice, hotels]);
 
+  // Handle hotel selection
+  const handleSelectHotel = (hotel) => {
+    setSelectedHotel(hotel);
+  };
+
+  // Handle back button from detail view
+  const handleBackToList = () => {
+    setSelectedHotel(null);
+  };
+
   return (
     <div className="mt-8">
       <div className="flex justify-between items-center mb-4">
@@ -102,73 +114,87 @@ const HotelList = () => {
         </button>
       </div>
       
-      {showFilters && (
-        <motion.div 
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: 'auto' }}
-          exit={{ opacity: 0, height: 0 }}
-          className="card mb-6"
-        >
-          <div className="mb-4">
-            <div className="flex items-center gap-2 mb-2">
-              <WalletIcon className="h-4 w-4 text-primary" />
-              <h4 className="font-medium">Price Range</h4>
-            </div>
-            
-            <div className="mb-2 flex justify-between text-sm text-surface-600 dark:text-surface-300">
-              <span>{formatCurrency(minPrice)}</span>
-              <span>{formatCurrency(maxPrice)}</span>
-            </div>
-            
-            <div className="px-2 py-4">
-              <div className="relative h-1 bg-surface-200 dark:bg-surface-700 rounded-full">
-                <div 
-                  className="absolute h-1 bg-primary rounded-full"
-                  style={{ 
-                    left: `${((minPrice - minDataPrice) / (maxDataPrice - minDataPrice)) * 100}%`,
-                    right: `${100 - ((maxPrice - minDataPrice) / (maxDataPrice - minDataPrice)) * 100}%`
-                  }}
-                ></div>
+      {selectedHotel ? (
+        <HotelDetail hotel={selectedHotel} onBack={handleBackToList} />
+      ) : (
+        <>
+          {showFilters && (
+            <motion.div 
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="card mb-6"
+            >
+              <div className="mb-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <WalletIcon className="h-4 w-4 text-primary" />
+                  <h4 className="font-medium">Price Range</h4>
+                </div>
+                
+                <div className="mb-2 flex justify-between text-sm text-surface-600 dark:text-surface-300">
+                  <span>{formatCurrency(minPrice)}</span>
+                  <span>{formatCurrency(maxPrice)}</span>
+                </div>
+                
+                <div className="px-2 py-4">
+                  <div className="relative h-1 bg-surface-200 dark:bg-surface-700 rounded-full">
+                    <div 
+                      className="absolute h-1 bg-primary rounded-full"
+                      style={{ 
+                        left: `${((minPrice - minDataPrice) / (maxDataPrice - minDataPrice)) * 100}%`,
+                        right: `${100 - ((maxPrice - minDataPrice) / (maxDataPrice - minDataPrice)) * 100}%`
+                      }}
+                    ></div>
+                  </div>
+                  
+                  <input
+                    type="range"
+                    min={minDataPrice}
+                    max={maxDataPrice}
+                    value={maxPrice}
+                    onChange={(e) => setMaxPrice(Number(e.target.value))}
+                    className="w-full h-2 bg-transparent rounded-lg appearance-none cursor-pointer absolute -mt-1"
+                  />
+                </div>
               </div>
-              
-              <input
-                type="range"
-                min={minDataPrice}
-                max={maxDataPrice}
-                value={maxPrice}
-                onChange={(e) => setMaxPrice(Number(e.target.value))}
-                className="w-full h-2 bg-transparent rounded-lg appearance-none cursor-pointer absolute -mt-1"
-              />
-            </div>
+            </motion.div>
+          )}
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredHotels.length > 0 ? filteredHotels.map((hotel, index) => (
+              <motion.div
+                key={hotel.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: index * 0.1 }}
+                className="card overflow-hidden hover:shadow-lg cursor-pointer transition-all"
+                onClick={() => handleSelectHotel(hotel)}
+              >
+                <img src={hotel.image} alt={hotel.name} className="w-full h-48 object-cover rounded-lg mb-4" />
+                <h4 className="font-semibold text-lg">{hotel.name}</h4>
+                <div className="flex items-center text-surface-600 dark:text-surface-300 mb-2">
+                  <MapPinIcon className="w-4 h-4 mr-1" /> {hotel.location}
+                </div>
+                <div className="flex justify-between items-center mt-3">
+                  <div className="flex items-center text-amber-500">
+                    <StarIcon className="w-4 h-4 mr-1 fill-current" /> {hotel.rating}
+                  </div>
+                  <div className="font-semibold text-lg">
+                    {formatCurrency(hotel.price)}
+                    <span className="text-sm text-surface-500"> / night</span>
+                  </div>
+                </div>
+              </motion.div>
+            )) : (
+              <div className="col-span-full text-center py-12">
+                <div className="text-surface-500 mb-2">
+                  No hotels found in the selected price range.
+                </div>
+              </div>
+            )}
           </div>
-        </motion.div>
+        </>
       )}
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredHotels.length > 0 ? filteredHotels.map((hotel, index) => (
-          <motion.div
-            key={hotel.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: index * 0.1 }}
-            className="card overflow-hidden hover:shadow-lg"
-          >
-            <img src={hotel.image} alt={hotel.name} className="w-full h-48 object-cover rounded-lg mb-4" />
-            <h4 className="font-semibold text-lg">{hotel.name}</h4>
-            <div className="flex items-center text-surface-600 dark:text-surface-300 mb-2"><MapPinIcon className="w-4 h-4 mr-1" /> {hotel.location}</div>
-            <div className="flex justify-between items-center mt-3">
-              <div className="flex items-center text-amber-500"><StarIcon className="w-4 h-4 mr-1 fill-current" /> {hotel.rating}</div>
-              <div className="font-semibold text-lg">{formatCurrency(hotel.price)}<span className="text-sm text-surface-500"> / night</span></div>
-            </div>
-          </motion.div>
-        )) : (
-          <div className="col-span-full text-center py-12">
-            <div className="text-surface-500 mb-2">
-              No hotels found in the selected price range.
-            </div>
-          </div>
-        )}
-      </div>
     </div>
   );
 };
