@@ -1,0 +1,253 @@
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import getIcon from '../utils/iconUtils';
+
+const ItineraryList = () => {
+  const CalendarIcon = getIcon('Calendar');
+  const MapPinIcon = getIcon('MapPin');
+  const FilterIcon = getIcon('Filter');
+  const WalletIcon = getIcon('Wallet');
+  const ClockIcon = getIcon('Clock');
+  const UsersIcon = getIcon('Users');
+  
+  // Sample itineraries data
+  const itineraries = [
+    {
+      id: 1,
+      title: "Golden Triangle Tour",
+      destinations: ["Delhi", "Agra", "Jaipur"],
+      duration: 7,
+      price: 25000,
+      image: "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      description: "Experience the rich history and culture of North India's most iconic cities.",
+      highlights: [
+        "Visit the Taj Mahal at sunrise",
+        "Explore Jaipur's majestic forts",
+        "Discover Delhi's blend of old and new"
+      ]
+    },
+    {
+      id: 2,
+      title: "Kerala Backwaters Retreat",
+      destinations: ["Kochi", "Alleppey", "Kumarakom"],
+      duration: 5,
+      price: 18500,
+      image: "https://images.unsplash.com/photo-1602301413608-0a5bc3be2209?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      description: "Relax and rejuvenate on a houseboat journey through Kerala's serene backwaters.",
+      highlights: [
+        "Overnight stay on traditional houseboat",
+        "Ayurvedic spa treatments",
+        "Fresh seafood cuisine"
+      ]
+    },
+    {
+      id: 3,
+      title: "Himalayan Adventure",
+      destinations: ["Manali", "Leh", "Ladakh"],
+      duration: 10,
+      price: 35000,
+      image: "https://images.unsplash.com/photo-1585116938581-f4b5847dd4f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      description: "An epic journey through the breathtaking landscapes of the Himalayas.",
+      highlights: [
+        "Cross the famous Rohtang Pass",
+        "Monastery visits in Ladakh",
+        "Camping under the stars"
+      ]
+    },
+    {
+      id: 4,
+      title: "Goa Beach Holiday",
+      destinations: ["North Goa", "South Goa"],
+      duration: 4,
+      price: 12000,
+      image: "https://images.unsplash.com/photo-1484821582734-6692f1df72c2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      description: "Sun, sand, and relaxation on India's most famous beaches.",
+      highlights: [
+        "Beach hopping",
+        "Water sports and activities",
+        "Vibrant nightlife"
+      ]
+    },
+    {
+      id: 5,
+      title: "Rajasthan Heritage Tour",
+      destinations: ["Udaipur", "Jodhpur", "Jaisalmer"],
+      duration: 8,
+      price: 28500,
+      image: "https://images.unsplash.com/photo-1599661046289-e31897836f47?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      description: "Discover the royal heritage and desert landscapes of Rajasthan.",
+      highlights: [
+        "Lake Palace in Udaipur",
+        "Blue City of Jodhpur",
+        "Desert safari in Jaisalmer"
+      ]
+    },
+    {
+      id: 6,
+      title: "Northeast Explorer",
+      destinations: ["Gangtok", "Darjeeling", "Shillong"],
+      duration: 9,
+      price: 32000,
+      image: "https://images.unsplash.com/photo-1518310952173-06788096c2a0?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
+      description: "Explore the less traveled paths of India's stunning northeastern states.",
+      highlights: [
+        "Tea plantations in Darjeeling",
+        "Living root bridges in Meghalaya",
+        "Himalayan views from Gangtok"
+      ]
+    }
+  ];
+
+  // Find min and max prices and durations
+  const minDataPrice = Math.min(...itineraries.map(item => item.price));
+  const maxDataPrice = Math.max(...itineraries.map(item => item.price));
+  const minDuration = Math.min(...itineraries.map(item => item.duration));
+  const maxDuration = Math.max(...itineraries.map(item => item.duration));
+  
+  // State for filters
+  const [maxPrice, setMaxPrice] = useState(maxDataPrice);
+  const [minDays, setMinDays] = useState(minDuration);
+  const [maxDays, setMaxDays] = useState(maxDuration);
+  const [filteredItineraries, setFilteredItineraries] = useState(itineraries);
+  const [showFilters, setShowFilters] = useState(false);
+
+  // Format currency in Rupees
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      maximumFractionDigits: 0
+    }).format(amount);
+  };
+  
+  // Filter itineraries when filters change
+  useEffect(() => {
+    const filtered = itineraries.filter(
+      item => item.price <= maxPrice && 
+             item.duration >= minDays && 
+             item.duration <= maxDays
+    );
+    
+    setFilteredItineraries(filtered);
+  }, [maxPrice, minDays, maxDays, itineraries]);
+
+  return (
+    <div className="mt-8">
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="text-xl font-semibold">Recommended Itineraries</h3>
+        <button 
+          onClick={() => setShowFilters(!showFilters)}
+          className="btn btn-outline flex items-center gap-2 py-1.5"
+        >
+          <FilterIcon className="h-4 w-4" />
+          Filters
+        </button>
+      </div>
+      
+      {showFilters && (
+        <motion.div 
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: 'auto' }}
+          exit={{ opacity: 0, height: 0 }}
+          className="card mb-6"
+        >
+          <div className="space-y-6">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <WalletIcon className="h-4 w-4 text-primary" />
+                <h4 className="font-medium">Maximum Price: {formatCurrency(maxPrice)}</h4>
+              </div>
+              <input
+                type="range"
+                min={minDataPrice}
+                max={maxDataPrice}
+                value={maxPrice}
+                onChange={(e) => setMaxPrice(Number(e.target.value))}
+                className="w-full h-2 bg-surface-200 dark:bg-surface-700 rounded-lg appearance-none cursor-pointer"
+              />
+            </div>
+            
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <CalendarIcon className="h-4 w-4 text-primary" />
+                <h4 className="font-medium">Duration: {minDays} - {maxDays} days</h4>
+              </div>
+              <div className="flex items-center gap-4">
+                <input
+                  type="number"
+                  min={minDuration}
+                  max={maxDays}
+                  value={minDays}
+                  onChange={(e) => setMinDays(Math.min(Number(e.target.value), maxDays))}
+                  className="w-20 text-center"
+                />
+                <input
+                  type="range"
+                  min={minDuration}
+                  max={maxDuration}
+                  value={maxDays}
+                  onChange={(e) => setMaxDays(Number(e.target.value))}
+                  className="flex-1 h-2 bg-surface-200 dark:bg-surface-700 rounded-lg appearance-none cursor-pointer"
+                />
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      )}
+      
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {filteredItineraries.length > 0 ? filteredItineraries.map((itinerary, index) => (
+          <motion.div
+            key={itinerary.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: index * 0.1 }}
+            className="card overflow-hidden hover:shadow-lg"
+          >
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="md:w-2/5">
+                <img src={itinerary.image} alt={itinerary.title} className="w-full h-48 md:h-full object-cover rounded-lg" />
+              </div>
+              <div className="md:w-3/5">
+                <h4 className="font-semibold text-xl mb-2">{itinerary.title}</h4>
+                <div className="flex items-center text-surface-600 dark:text-surface-300 mb-2">
+                  <MapPinIcon className="w-4 h-4 mr-1" /> 
+                  {itinerary.destinations.join(" • ")}
+                </div>
+                <p className="text-surface-600 dark:text-surface-300 text-sm mb-3">{itinerary.description}</p>
+                
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {itinerary.highlights.map((highlight, i) => (
+                    <span key={i} className="text-xs bg-surface-100 dark:bg-surface-700 px-2 py-1 rounded-full">
+                      {highlight}
+                    </span>
+                  ))}
+                </div>
+                
+                <div className="flex flex-wrap justify-between items-center mt-auto">
+                  <div className="flex items-center text-surface-600 dark:text-surface-300 text-sm">
+                    <ClockIcon className="w-4 h-4 mr-1" /> {itinerary.duration} days
+                  </div>
+                  <div className="font-bold text-lg text-primary">
+                    {formatCurrency(itinerary.price)}
+                    <span className="text-sm font-normal text-surface-500"> / person</span>
+                  </div>
+                </div>
+                
+                <button className="btn btn-primary w-full mt-4">View Itinerary</button>
+              </div>
+            </div>
+          </motion.div>
+        )) : (
+          <div className="col-span-full text-center py-12">
+            <div className="text-surface-500 mb-2">
+              No itineraries found matching your filters.
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default ItineraryList;

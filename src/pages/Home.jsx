@@ -3,6 +3,9 @@ import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import getIcon from '../utils/iconUtils';
 import MainFeature from '../components/MainFeature';
+import FlightList from '../components/FlightList';
+import AttractionList from '../components/AttractionList';
+import ItineraryList from '../components/ItineraryList';
 import HotelList from '../components/HotelList';
 
 function Home() {
@@ -110,6 +113,9 @@ function Home() {
             </div>
           </div>
           
+          {activeTab === 'flights' && <FlightList />}
+          {activeTab === 'attractions' && <AttractionList />}
+          {activeTab === 'itineraries' && <ItineraryList />}
           {activeTab === 'hotels' && <HotelList />}
         </motion.div>
       </section>
