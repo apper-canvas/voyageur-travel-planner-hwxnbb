@@ -306,14 +306,14 @@ function MainFeature() {
                 type="range"
                 min="500"
                 max="10000"
-                step="100"
-                value={budget}
+                max="200000"
+                step="1000"
                 onChange={(e) => setBudget(Number(e.target.value))}
                 className="w-full h-2 bg-surface-200 dark:bg-surface-700 rounded-lg appearance-none cursor-pointer"
               />
               <div className="flex justify-between text-xs text-surface-500">
                 <span>₹500</span>
-                <span>₹10,000</span>
+                <span>₹2,00,000</span>
               </div>
             </div>
             
