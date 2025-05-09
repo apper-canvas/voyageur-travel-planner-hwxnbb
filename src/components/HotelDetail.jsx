@@ -91,30 +91,45 @@ const HotelDetail = ({ hotel, onBack }) => {
           {/* Image Gallery */}
           <div className="grid grid-cols-3 gap-2 h-64 md:h-96">
             <div className="col-span-2 h-full">
-              <img 
-                src={hotelDetails.images[0]} 
-                alt={hotel.name} 
-                className="w-full h-full object-cover rounded-lg"
-              />
+              <div className="relative h-full">
+                <img 
+                  src={hotelDetails.images[0]} 
+                  alt={hotel.name} 
+                  className="w-full h-full object-cover rounded-lg"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg"></div>
+                <div className="absolute bottom-0 left-0 p-4 w-full">
+                  <h1 className="text-2xl font-bold text-white">{hotel.name}</h1>
+                  <div className="flex items-center text-white/90 mb-1">
+                    <MapPinIcon className="w-4 h-4 mr-1" /> {hotel.location}
+                  </div>
+                </div>
+              </div>
             </div>
             <div className="space-y-2 h-full">
-              <img 
-                src={hotelDetails.images[1]} 
-                alt={`${hotel.name} room`} 
-                className="w-full h-1/2 object-cover rounded-lg"
-              />
-              <img 
-                src={hotelDetails.images[2]} 
-                alt={`${hotel.name} amenities`} 
-                className="w-full h-1/2 object-cover rounded-lg"
-              />
+              <div className="relative h-1/2">
+                <img 
+                  src={hotelDetails.images[1]} 
+                  alt={`${hotel.name} room`} 
+                  className="w-full h-full object-cover rounded-lg"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-lg"></div>
+              </div>
+              <div className="relative h-1/2">
+                <img 
+                  src={hotelDetails.images[2]} 
+                  alt={`${hotel.name} amenities`} 
+                  className="w-full h-full object-cover rounded-lg"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent rounded-lg"></div>
+              </div>
             </div>
           </div>
 
           {/* Hotel Information */}
           <div className="card">
             <div className="flex justify-between items-start mb-4">
-              <div>
+                <h2 className="text-2xl font-bold">{hotel.name}</h2>
                 <h1 className="text-2xl font-bold">{hotel.name}</h1>
                 <div className="flex items-center text-surface-600 dark:text-surface-300 mb-1">
                   <MapPinIcon className="w-4 h-4 mr-1" /> {hotel.location}

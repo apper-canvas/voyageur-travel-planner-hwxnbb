@@ -170,18 +170,23 @@ const HotelList = () => {
                 className="card overflow-hidden hover:shadow-lg cursor-pointer transition-all"
                 onClick={() => handleSelectHotel(hotel)}
               >
-                <img src={hotel.image} alt={hotel.name} className="w-full h-48 object-cover rounded-lg mb-4" />
-                <h4 className="font-semibold text-lg">{hotel.name}</h4>
-                <div className="flex items-center text-surface-600 dark:text-surface-300 mb-2">
-                  <MapPinIcon className="w-4 h-4 mr-1" /> {hotel.location}
-                </div>
-                <div className="flex justify-between items-center mt-3">
-                  <div className="flex items-center text-amber-500">
-                    <StarIcon className="w-4 h-4 mr-1 fill-current" /> {hotel.rating}
-                  </div>
-                  <div className="font-semibold text-lg">
-                    {formatCurrency(hotel.price)}
-                    <span className="text-sm text-surface-500"> / night</span>
+                <div className="relative">
+                  <img src={hotel.image} alt={hotel.name} className="w-full h-48 object-cover rounded-lg" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent rounded-lg"></div>
+                  <div className="absolute bottom-0 left-0 p-4 w-full">
+                    <h4 className="font-semibold text-lg text-white">{hotel.name}</h4>
+                    <div className="flex items-center text-white/90 mb-1">
+                      <MapPinIcon className="w-4 h-4 mr-1" /> {hotel.location}
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center text-amber-400">
+                        <StarIcon className="w-4 h-4 mr-1 fill-current" /> {hotel.rating}
+                      </div>
+                      <div className="font-semibold text-lg text-white">
+                        {formatCurrency(hotel.price)}
+                        <span className="text-sm text-white/80"> / night</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </motion.div>
