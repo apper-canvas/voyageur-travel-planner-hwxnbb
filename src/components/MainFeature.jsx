@@ -18,6 +18,7 @@ function MainFeature() {
   
   // Trip planner state
   const [destination, setDestination] = useState('');
+  const [source, setSource] = useState('');
   const [startDate, setStartDate] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [endDate, setEndDate] = useState('');
@@ -55,6 +56,10 @@ function MainFeature() {
   // Validate form
   const validateForm = () => {
     const newErrors = {};
+
+    if (!source.trim()) {
+      newErrors.source = "Source is required";
+    }
     
     if (!destination.trim()) {
       newErrors.destination = "Destination is required";
@@ -94,6 +99,7 @@ function MainFeature() {
       
       const newTripPlan = {
         destination,
+        source,
         startDate: startDateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
         endDate: endDateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
         duration: tripDuration,
@@ -129,6 +135,7 @@ function MainFeature() {
   // Reset the form
   const resetForm = () => {
     setDestination('');
+    setSource('');
     setStartDate('');
     setEndDate('');
     setTravelers(2);
@@ -190,6 +197,23 @@ function MainFeature() {
           <h3 className="text-xl font-semibold mb-6">Trip Details</h3>
           
           <div className="space-y-4">
+            <div className="input-group">
+              <label htmlFor="source" className="input-label">Source</label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <MapPinIcon className="h-4 w-4 text-surface-400" />
+                </div>
+                <input
+                  id="source"
+                  type="text"
+                  value={source}
+                  onChange={(e) => setSource(e.target.value)}
+                  placeholder="Your starting location"
+                  className={`w-full pl-10 ${errors.source ? 'border-red-500' : ''}`}
+                />
+              </div>
+              {errors.source && <p className="input-error">{errors.source}</p>}
+            </div>
             <div className="input-group">
               <label htmlFor="destination" className="input-label">Destination</label>
               <div className="relative">
@@ -398,8 +422,9 @@ function MainFeature() {
                 <div>
                   <h3 className="text-2xl font-bold">{tripPlan.destination}</h3>
                   <p className="text-surface-500">
-                    {tripPlan.startDate} - {tripPlan.endDate} • {tripPlan.duration} {tripPlan.duration === 1 ? 'day' : 'days'} 
-                    • {tripPlan.travelers} {tripPlan.travelers === 1 ? 'traveler' : 'travelers'}
+                  From: {tripPlan.source} • To: {tripPlan.destination} <br />
+                  {tripPlan.startDate} - {tripPlan.endDate} • {tripPlan.duration} {tripPlan.duration === 1 ? 'day' : 'days'} • 
+                  {tripPlan.travelers} {tripPlan.travelers === 1 ? 'traveler' : 'travelers'}
                   </p>
                 </div>
                 <div className="flex flex-col items-end">
