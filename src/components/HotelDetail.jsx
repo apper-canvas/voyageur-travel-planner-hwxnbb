@@ -129,8 +129,8 @@ const HotelDetail = ({ hotel, onBack }) => {
           {/* Hotel Information */}
           <div className="card">
             <div className="flex justify-between items-start mb-4">
+              <div>
                 <h2 className="text-2xl font-bold">{hotel.name}</h2>
-                <h1 className="text-2xl font-bold">{hotel.name}</h1>
                 <div className="flex items-center text-surface-600 dark:text-surface-300 mb-1">
                   <MapPinIcon className="w-4 h-4 mr-1" /> {hotel.location}
                 </div>
