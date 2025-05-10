@@ -280,7 +280,6 @@ const ItineraryList = () => {
             </div>
           </div>
         )}
-      
 
       {showModal && (
         <motion.div 
@@ -380,7 +379,7 @@ const ItineraryList = () => {
           </motion.div>
         </motion.div>
       )} 
-    </div> 
+    </div>
   );
 };
 
